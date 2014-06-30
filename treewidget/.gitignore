@@ -1,0 +1,7 @@
+*.swp
+*.pyc
+local_settings.py
+dev.db
+site_media/*
+sass/.sass-cache
+.DS_Store

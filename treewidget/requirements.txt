@@ -1,0 +1,4 @@
+Django==1.6.5
+South
+django-mptt
+django-extensions

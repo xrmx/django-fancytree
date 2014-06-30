@@ -1,0 +1,4 @@
+include LICENSE.md
+include README.rst
+recursive-include fancytree/static/fancytree *.txt *.js
+recursive-include fancytree/static/fancytree/* *.txt *.css *.gif *.js
