@@ -52,6 +52,9 @@ def get_tree(nodes, values):
             parent["children"] = children
             parent["folder"] = True
 
+    if not nodes:
+        return results
+
     for node in nodes:
         add_doc(node)
 
