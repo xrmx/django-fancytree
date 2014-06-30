@@ -1,11 +1,13 @@
 Django Fancytree Widget
 ----------------------
 
-django forms widget built to be used with django-mptt registered models.
+django-fancytree provides a widget using the fancytree js library to
+render a forms.ModelMultipleChoiceField as a tree with selectable and
+collapsable nodes.
+
 See included project 'treewidget' as an example. Widget is used in
 ModelMultipleChoiceField and allows user to select multiple categories.
 
-This project is a port of django-dynatree by Andrii Kurinnyi to fancytree.
 
 Usage
 -----
