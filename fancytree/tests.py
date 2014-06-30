@@ -1,9 +1,13 @@
 from django.test import TestCase
+from fancytree.widgets import FancyTreeWidget
 
+class WidgetTest(TestCase):
+    def test_widget_loads(self):
+        widget = FancyTreeWidget()
+        self.assertIsInstance(widget, FancyTreeWidget)
 
-class SimpleTest(TestCase):
-    def test_basic_addition(self):
-        """
-        Tests that 1 + 1 always equals 2.
-        """
-        self.assertEqual(1 + 1, 2)
+    def test_widget_render_js(self):
+        widget = FancyTreeWidget()
+        attrs = {'id': 'fancyfoo'}
+        html = widget.render("foo", ["1", "2"], attrs)
+        self.assertTrue(".fancytree({" in html)
