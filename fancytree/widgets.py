@@ -74,10 +74,10 @@ class FancyTreeWidget(SelectMultiple):
         final_attrs = self.build_attrs(attrs, name=name)
         if has_id:
             output = [u'<div id="%s"></div>' % attrs['id']]
-            id_attr = u''
+            id_attr = u' id="%s_checkboxes"' % (attrs['id'])
         else:
             output = [u'<div></div>']
-            id_attr = u' id="%s_checkboxes"' % (attrs['id'])
+            id_attr = u''
         output.append(u'<ul class="fancytree_checkboxes"%s>' % id_attr)
         str_values = set([force_unicode(v) for v in value])
         for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
