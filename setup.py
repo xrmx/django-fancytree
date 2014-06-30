@@ -24,8 +24,7 @@ setup(name='django-fancytree',
       long_description=open(
           os.path.join(os.path.dirname(__file__), 'README.rst'),
       ).read().strip(),
-      include_package_data=True,
-      install_required=[
+      requires=[
           'Django',
       ]
 )
