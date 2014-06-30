@@ -2,10 +2,11 @@ from itertools import chain
 
 from django import forms
 from django.conf import settings
-from django.forms.widgets import SelectMultiple
+from django.forms.widgets import Widget
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
+from django.utils.datastructures import MultiValueDict, MergeDict
 
 try:
     import simplejson as json
@@ -61,11 +62,17 @@ def get_tree(nodes, values):
     return results
 
 
-class FancyTreeWidget(SelectMultiple):
+class FancyTreeWidget(Widget):
     def __init__(self, attrs=None, choices=(), queryset=None, select_mode=2):
-        super(FancyTreeWidget, self).__init__(attrs, choices)
+        super(FancyTreeWidget, self).__init__(attrs)
         self.queryset = queryset
         self.select_mode = select_mode
+        self.choices = list(choices)
+
+    def value_from_datadict(self, data, files, name):
+        if isinstance(data, (MultiValueDict, MergeDict)):
+            return data.getlist(name)
+        return data.get(name, None)
 
     def render(self, name, value, attrs=None, choices=()):
         if value is None:
