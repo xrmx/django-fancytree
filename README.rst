@@ -9,6 +9,12 @@ See included project 'treewidget' as an example. Widget is used in
 ModelMultipleChoiceField and allows user to select multiple categories.
 
 
+Requirements
+------------
+
+django, django-mptt, jquery, jquery-ui
+
+
 Usage
 -----
 
