@@ -7,11 +7,13 @@ from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.datastructures import MultiValueDict, MergeDict
+from mptt.templatetags.mptt_tags import cache_tree_children
 
 try:
     import simplejson as json
 except ImportError:
     import json
+
 
 def get_doc(node, values):
     if hasattr(node, "get_doc"):
@@ -26,41 +28,23 @@ def get_doc(node, values):
         doc['expand'] = True
     return doc
 
+def recursive_node_to_dict(node, values):
+    result = get_doc(node, values)
+    children = [recursive_node_to_dict(c, values) for c in node.get_children()]
+    if children:
+        expand = [c for c in children if c.get('select', False)]
+        if expand:
+            result["expand"] = True
+        result["folder"] = True
+        result['children'] = children
+    return result
+
 def get_tree(nodes, values):
-    parent = {}
-    parent_level = 0
-    stack = []
-    results = []
-
-    def find_parent(child, results):
-        for node in reversed(results):
-            if child.url.startswith(node["url"]):
-                if child.parent_id != node["key"]:
-                    return find_parent(child, node["children"])
-                else:
-                    return node
-
-    def add_doc(node):
-        if node.level == 0:
-            results.append(get_doc(node, values))
-        elif node.level >= 1:
-            parent = find_parent(node, results)
-            children = parent.get("children", [])
-            child = get_doc(node, values)
-            if child.get('select', False):
-                parent['expand'] = True
-            children.append(child)
-            parent["children"] = children
-            parent["folder"] = True
-
-    if not nodes:
-        return results
-
-    for node in nodes:
-        add_doc(node)
-
-    return results
-
+    root_nodes = cache_tree_children(nodes)
+    dicts = []
+    for n in root_nodes:
+        dicts.append(recursive_node_to_dict(n, values))
+    return dicts
 
 class FancyTreeWidget(Widget):
     def __init__(self, attrs=None, choices=(), queryset=None, select_mode=2):
