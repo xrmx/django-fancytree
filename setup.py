@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 import fancytree
 import os
 
@@ -10,7 +10,7 @@ setup(name='django-fancytree',
       author='Riccardo Magliocchetti',
       author_email='riccardo.magliocchetti@gmail.com',
       url='https://github.com/xrmx/django-fancytree',
-      packages=['fancytree',],
+      packages=find_packages(),
       keywords=['django', 'fancytree', 'mptt', 'tree'],
       classifiers=[
           'Programming Language :: Python',
@@ -24,7 +24,8 @@ setup(name='django-fancytree',
       long_description=open(
           os.path.join(os.path.dirname(__file__), 'README.rst'),
       ).read().strip(),
-      requires=[
+      install_requires=[
           'Django',
-      ]
+      ],
+      include_package_data=True
 )
