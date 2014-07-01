@@ -12,3 +12,9 @@ class WidgetTest(TestCase):
         html = widget.render("foo", ["1", "2"], attrs)
         self.assertTrue('.fancytree({' in html)
         self.assertTrue('<ul class="fancytree_checkboxes" id="fancyfoo_checkboxes">' in html)
+
+    def test_widget_render_single_value(self):
+        widget = FancyTreeWidget()
+        attrs = {'id': 'fancyfoo'}
+        html = widget.render("foo", "1", attrs)
+        self.assertTrue('.fancytree({' in html)
