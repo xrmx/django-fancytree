@@ -61,6 +61,8 @@ class FancyTreeWidget(Widget):
     def render(self, name, value, attrs=None, choices=()):
         if value is None:
             value = []
+        if not isinstance(value, (list, tuple)):
+            value = [value]
         has_id = attrs and 'id' in attrs
         final_attrs = self.build_attrs(attrs, name=name)
         if has_id:
