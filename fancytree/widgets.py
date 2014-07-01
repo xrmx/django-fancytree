@@ -22,7 +22,7 @@ def get_doc(node, values):
         name = node.name
     else:
         name = unicode(node)
-    doc = {"title": name, "key": node.pk, "url": node.url}
+    doc = {"title": name, "key": node.pk}
     if str(node.pk) in values:
         doc['select'] = True
         doc['expand'] = True
