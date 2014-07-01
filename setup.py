@@ -26,6 +26,7 @@ setup(name='django-fancytree',
       ).read().strip(),
       install_requires=[
           'Django',
+          'django-mptt',
       ],
       include_package_data=True
 )
