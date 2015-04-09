@@ -22,7 +22,7 @@ Usage
 
   from fancytree.widgets import FancyTreeWidget
 
-  categories = Category.objects.all()
+  categories = Category.objects.order_by('tree_id', 'lft')
 
   class CategoryForm(forms.Form):
       categories = forms.ModelMultipleChoiceField(
