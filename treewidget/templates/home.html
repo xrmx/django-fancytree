@@ -9,6 +9,13 @@
   {{ form.as_p }}
   <p><button type="submit">Submit</button></p>
 </form>
+
+<h4>Selections</h4>
+<ul>
+{% for selection in selections %}
+<li><a href="{{ selection.get_absolute_url }}">{{ selection.name }}</a></li>
+{% endfor %}
+</ul>
 {% endblock %}
 
 {% block extra_scripts %}

@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 from django_extensions.db.fields import AutoSlugField
 import mptt
 
@@ -72,3 +73,13 @@ class Category(models.Model):
                 child.update_url()
 
 mptt.register(Category, order_insertion_by=['name'])
+
+class Selection (models.Model):
+    name = models.CharField(max_length=50)
+    categories = models.ManyToManyField(Category)
+
+    def __unicode__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('selection', args=[self.pk])
