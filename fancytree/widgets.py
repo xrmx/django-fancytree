@@ -24,7 +24,7 @@ def get_doc(node, values):
         name = unicode(node)
     doc = {"title": name, "key": node.pk}
     if str(node.pk) in values:
-        doc['select'] = True
+        doc['selected'] = True
         doc['expand'] = True
     return doc
 
@@ -32,7 +32,7 @@ def recursive_node_to_dict(node, values):
     result = get_doc(node, values)
     children = [recursive_node_to_dict(c, values) for c in node.get_children()]
     if children:
-        expand = [c for c in children if c.get('select', False)]
+        expand = [c for c in children if c.get('selected', False)]
         if expand:
             result["expand"] = True
         result["folder"] = True
