@@ -41,10 +41,7 @@ def recursive_node_to_dict(node, values):
 
 def get_tree(nodes, values):
     root_nodes = cache_tree_children(nodes)
-    dicts = []
-    for n in root_nodes:
-        dicts.append(recursive_node_to_dict(n, values))
-    return dicts
+    return [recursive_node_to_dict(n, values) for n in root_nodes]
 
 class FancyTreeWidget(Widget):
     def __init__(self, attrs=None, choices=(), queryset=None, select_mode=2):
