@@ -102,7 +102,7 @@ class FancyTreeWidget(Widget):
                         debugLevel: %(debug)d,
                         select: function(event, data) {
                             $('#%(id)s_checkboxes').find('input[type=checkbox]').prop('checked', false);
-                            var selNodes = data.tree.getSelectedNodes(%(select_mode)d === 3);
+                            var selNodes = data.tree.getSelectedNodes();
                             var selKeys = $.map(selNodes, function(node){
                                    $('#%(id)s_' + (node.key)).prop('checked', true);
                                    return node.key;
