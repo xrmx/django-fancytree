@@ -101,10 +101,10 @@ class FancyTreeWidget(Widget):
                         source: fancytree_data_%(id)s,
                         debugLevel: %(debug)d,
                         select: function(event, data) {
-                            $('#%(id)s_checkboxes').find('input[type=checkbox]').removeProp('checked');
+                            $('#%(id)s_checkboxes').find('input[type=checkbox]').prop('checked', false);
                             var selNodes = data.tree.getSelectedNodes(%(select_mode)d === 3);
                             var selKeys = $.map(selNodes, function(node){
-                                   $('#%(id)s_' + (node.key)).prop('checked', 'checked');
+                                   $('#%(id)s_' + (node.key)).prop('checked', true);
                                    return node.key;
                             });
                         },
