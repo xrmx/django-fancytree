@@ -86,9 +86,10 @@ class FancyTreeWidget(Widget):
             )
         output.append(u'</ul>')
         output.append(u'<script type="text/javascript">')
+        js_data_var = 'fancytree_data_%s' % (attrs['id'].replace('-', '_'))
         if has_id:
-            output.append(u'var fancytree_data_%s = %s;' % (
-                attrs['id'],
+            output.append(u'var %s = %s;' % (
+                js_data_var,
                 json.dumps(get_tree(self.queryset, str_values))
             ))
             output.append(
@@ -98,7 +99,7 @@ class FancyTreeWidget(Widget):
                     $("#%(id)s").fancytree({
                         checkbox: true,
                         selectMode: %(select_mode)d,
-                        source: fancytree_data_%(id)s,
+                        source: %(js_var)s,
                         debugLevel: %(debug)d,
                         select: function(event, data) {
                             $('#%(id)s_checkboxes').find('input[type=checkbox]').prop('checked', false);
@@ -124,6 +125,7 @@ class FancyTreeWidget(Widget):
                 });
                 """ % {
                     'id': attrs['id'],
+                    'js_var': js_data_var,
                     'debug': settings.DEBUG and 1 or 0,
                     'select_mode': self.select_mode,
                 }
