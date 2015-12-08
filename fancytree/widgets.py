@@ -28,28 +28,31 @@ def get_doc(node, values):
         doc['expand'] = True
     return doc
 
-def recursive_node_to_dict(node, values):
+def recursive_node_to_dict(node, values, hide_folder_checkbox):
     result = get_doc(node, values)
-    children = [recursive_node_to_dict(c, values) for c in node.get_children()]
+    children = [recursive_node_to_dict(c, values, hide_folder_checkbox) for c in node.get_children()]
     if children:
         expand = [c for c in children if c.get('selected', False)]
         if expand:
             result["expand"] = True
         result["folder"] = True
+        if hide_folder_checkbox:
+            result['hideCheckbox'] = True
         result['children'] = children
     return result
 
-def get_tree(nodes, values):
+def get_tree(nodes, values, hide_folder_checkbox):
     root_nodes = cache_tree_children(nodes)
-    return [recursive_node_to_dict(n, values) for n in root_nodes]
+    return [recursive_node_to_dict(n, values, hide_folder_checkbox) for n in root_nodes]
 
 class FancyTreeWidget(Widget):
-    def __init__(self, attrs=None, choices=(), queryset=None, select_mode=2):
+    def __init__(self, attrs=None, choices=(), queryset=None, select_mode=2, hide_folder_checkbox=False):
         super(FancyTreeWidget, self).__init__(attrs)
         self.queryset = queryset
         self.select_mode = select_mode
         self.choices = list(choices)
-        
+        self.hide_folder_checkbox = hide_folder_checkbox
+
     def value_from_datadict(self, data, files, name):
         if isinstance(data, (MultiValueDict, MergeDict)):
             return data.getlist(name)
@@ -90,7 +93,7 @@ class FancyTreeWidget(Widget):
         if has_id:
             output.append(u'var %s = %s;' % (
                 js_data_var,
-                json.dumps(get_tree(self.queryset, str_values))
+                json.dumps(get_tree(self.queryset, str_values, self.hide_folder_checkbox))
             ))
             output.append(
                 """
