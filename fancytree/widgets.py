@@ -38,7 +38,7 @@ def recursive_node_to_dict(node, values, hide_folder_checkbox):
         result["folder"] = True
         if hide_folder_checkbox:
             result['hideCheckbox'] = True
-        result['isLazy'] = True
+        result['lazy'] = True
         result['children'] = children
     return result
 
