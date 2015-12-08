@@ -22,7 +22,7 @@ def get_doc(node, values):
         name = node.name
     else:
         name = unicode(node)
-    doc = {"title": name, "key": node.pk, "isLazy": True}
+    doc = {"title": name, "key": node.pk}
     if str(node.pk) in values:
         doc['selected'] = True
         doc['expand'] = True
@@ -38,6 +38,7 @@ def recursive_node_to_dict(node, values, hide_folder_checkbox):
         result["folder"] = True
         if hide_folder_checkbox:
             result['hideCheckbox'] = True
+        result['isLazy'] = True
         result['children'] = children
     return result
 
