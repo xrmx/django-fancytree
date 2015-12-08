@@ -71,23 +71,23 @@ class FancyTreeWidget(Widget):
         else:
             output = [u'<div></div>']
             id_attr = u''
-        output.append(u'<ul class="fancytree_checkboxes"%s>' % id_attr)
+     #   output.append(u'<ul class="fancytree_checkboxes"%s>' % id_attr)
         str_values = set([force_unicode(v) for v in value])
-        for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
-            if has_id:
-                final_attrs = dict(final_attrs, id='%s_%s' % (attrs['id'], option_value))
-                label_for = u' for="%s"' % final_attrs['id']
-            else:
-                label_for = ''
-
-            cb = forms.CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
-            option_value = force_unicode(option_value)
-            rendered_cb = cb.render(name, option_value)
-            option_label = conditional_escape(force_unicode(option_label))
-            output.append(
-                u'<li><label%s>%s %s</label></li>' % (label_for, rendered_cb, option_label)
-            )
-        output.append(u'</ul>')
+    #    for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
+    #        if has_id:
+    #            final_attrs = dict(final_attrs, id='%s_%s' % (attrs['id'], option_value))
+    #            label_for = u' for="%s"' % final_attrs['id']
+    #        else:
+    #            label_for = ''
+    #
+    #        cb = forms.CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
+    #        option_value = force_unicode(option_value)
+    #        rendered_cb = cb.render(name, option_value)
+    #        option_label = conditional_escape(force_unicode(option_label))
+    #        output.append(
+    #            u'<li><label%s>%s %s</label></li>' % (label_for, rendered_cb, option_label)
+    #        )
+    #    output.append(u'</ul>')
         output.append(u'<script type="text/javascript">')
         js_data_var = 'fancytree_data_%s' % (attrs['id'].replace('-', '_'))
         if has_id:
