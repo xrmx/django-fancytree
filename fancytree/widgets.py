@@ -8,6 +8,7 @@ from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.datastructures import MultiValueDict, MergeDict
 from mptt.templatetags.mptt_tags import cache_tree_children
+from mptt.forms import TreeNodeChoiceField
 
 try:
     import simplejson as json
@@ -66,28 +67,42 @@ class FancyTreeWidget(Widget):
         has_id = attrs and 'id' in attrs
         final_attrs = self.build_attrs(attrs, name=name)
         if has_id:
-            output = [u'<div id="%s"></div>' % attrs['id']]
+            output = [u'<div id="f%s"></div>' % attrs['id']]
             id_attr = u' id="%s_checkboxes"' % (attrs['id'])
         else:
             output = [u'<div></div>']
             id_attr = u''
-     #   output.append(u'<ul class="fancytree_checkboxes"%s>' % id_attr)
+#        output.append(u'<ul class="fancytree_checkboxes"%s>' % id_attr)
+        if self.select_mode == 3:
+            multiple_tag = u'multiple'
+        else:
+            multiple_tag = u''
+        output.append(u'<select id="%s" name="%s" class="fancytree_checkboxes"%s %s>' % (attrs['id'], name, id_attr, multiple_tag))
         str_values = set([force_unicode(v) for v in value])
-    #    for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
-    #        if has_id:
-    #            final_attrs = dict(final_attrs, id='%s_%s' % (attrs['id'], option_value))
-    #            label_for = u' for="%s"' % final_attrs['id']
-    #        else:
-    #            label_for = ''
-    #
-    #        cb = forms.CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
-    #        option_value = force_unicode(option_value)
-    #        rendered_cb = cb.render(name, option_value)
-    #        option_label = conditional_escape(force_unicode(option_label))
-    #        output.append(
-    #            u'<li><label%s>%s %s</label></li>' % (label_for, rendered_cb, option_label)
-    #        )
-    #    output.append(u'</ul>')
+        for i, (option_value, option_label) in enumerate(chain(self.choices, choices)):
+            if has_id:
+                final_attrs = dict(final_attrs, id='%s_%s' % (attrs['id'], option_value))
+                label_for = u' for="%s"' % final_attrs['id']
+            else:
+                label_for = ''
+
+            # cb = forms.CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
+            option_value = force_unicode(option_value)
+       #     rendered_cb = cb.render(name, option_value)
+            option_label = conditional_escape(force_unicode(option_label))
+       #     output.append(
+        #        u'<label%s>%s %s</label>' % (label_for, rendered_cb, option_label)
+         #   )
+            sel = u''
+            try:
+                if option_value in force_unicode(value):
+                    sel = u' selected '
+            except IndexError:
+                pass
+            output.append(u'<option value="%s" name="%s" id="id_%s_%s" %s> '
+                          u'%s</option>' % (option_value, name, name, option_value, sel, option_label))
+
+        output.append(u'</select>')
         output.append(u'<script type="text/javascript">')
         js_data_var = 'fancytree_data_%s' % (attrs['id'].replace('-', '_'))
         if has_id:
@@ -99,16 +114,19 @@ class FancyTreeWidget(Widget):
                 """
                 $(".fancytree_checkboxes").hide();
                 $(function() {
-                    $("#%(id)s").fancytree({
+                    $("#f%(id)s").fancytree({
                         checkbox: true,
+                        clickFolderMode: 2,
+                        activeVisible: true,
                         selectMode: %(select_mode)d,
                         source: %(js_var)s,
                         debugLevel: %(debug)d,
                         select: function(event, data) {
-                            $('#%(id)s_checkboxes').find('input[type=checkbox]').prop('checked', false);
+                            $('#%(id)s').prop('selectedIndex',0);
+                            $("#%(id)s option:selected").prop("selected", false);
                             var selNodes = data.tree.getSelectedNodes();
                             var selKeys = $.map(selNodes, function(node){
-                                   $('#%(id)s_' + (node.key)).prop('checked', true);
+                                   $('#%(id)s_' + (node.key)).prop('selected', true);
                                    return node.key;
                             });
                         },
