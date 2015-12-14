@@ -95,7 +95,9 @@ class FancyTreeWidget(Widget):
          #   )
             sel = u''
             try:
-                if option_value in force_unicode(value):
+                if option_value == force_unicode(value[0]) and self.select_mode != 3:
+                    sel = u' selected '
+                elif option_value in force_unicode(value) and self.select_mode == 3:
                     sel = u' selected '
             except IndexError:
                 pass
@@ -115,18 +117,27 @@ class FancyTreeWidget(Widget):
                 $(".fancytree_checkboxes").hide();
                 $(function() {
                     $("#f%(id)s").fancytree({
+
                         checkbox: true,
                         clickFolderMode: 2,
                         activeVisible: true,
                         selectMode: %(select_mode)d,
                         source: %(js_var)s,
                         debugLevel: %(debug)d,
+                        beforeSelect: function(event, data){
+                         // A node is about to be selected: prevent this, to limit node selections:
+                             if( $('#%(id)s option:selected').length == 5 &! data.node.isSelected() ){
+                             alert('You can only choose 5!');
+                             return false;
+                              }
+                         },
                         select: function(event, data) {
-                            $('#%(id)s').prop('selectedIndex',0);
+                        //    $('#%(id)s').prop('selectedIndex',0);
                             $("#%(id)s option:selected").prop("selected", false);
                             var selNodes = data.tree.getSelectedNodes();
                             var selKeys = $.map(selNodes, function(node){
                                    $('#%(id)s_' + (node.key)).prop('selected', true);
+                                   $( "#%(id)s" ).change();
                                    return node.key;
                             });
                         },
