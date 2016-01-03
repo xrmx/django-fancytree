@@ -166,9 +166,10 @@ class FancyTreeWidget(Widget):
         return mark_safe(u'\n'.join(output))
 
     class Media:
-        css = {
-            'all': ('css/fancytree/skin-vista/ui.fancytree.css',)
-        }
-        js = (
-            'js/fancytree/jquery.fancytree.min.js',
-        )
+        pass
+        # css = {
+        #     'all': ('css/fancytree/skin-vista/ui.fancytree.css',)
+        # }
+        # js = (
+        #     'js/fancytree/jquery.fancytree.min.js',
+        # )
