@@ -167,8 +167,8 @@ class FancyTreeWidget(Widget):
 
     class Media:
         css = {
-            'all': ('fancytree/skin-vista/ui.fancytree.css',)
+            'all': ('css/fancytree/skin-vista/ui.fancytree.css',)
         }
         js = (
-            'fancytree/jquery.fancytree.min.js',
+            'js/fancytree/jquery.fancytree.min.js',
         )
