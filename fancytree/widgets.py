@@ -44,11 +44,12 @@ def get_tree(nodes, values):
     return [recursive_node_to_dict(n, values) for n in root_nodes]
 
 class FancyTreeWidget(Widget):
-    def __init__(self, attrs=None, choices=(), queryset=None, select_mode=2):
+    def __init__(self, attrs=None, choices=(), queryset=None, select_mode=2, icons=True):
         super(FancyTreeWidget, self).__init__(attrs)
         self.queryset = queryset
         self.select_mode = select_mode
         self.choices = list(choices)
+        self.icons = icons
 
     def value_from_datadict(self, data, files, name):
         if isinstance(data, (MultiValueDict, MergeDict)) and self.select_mode != 1:
@@ -101,6 +102,7 @@ class FancyTreeWidget(Widget):
                         selectMode: %(select_mode)d,
                         source: %(js_var)s,
                         debugLevel: %(debug)d,
+                        icons: %(icons)s,
                         select: function(event, data) {
                             $('#%(id)s_checkboxes').find('input[type=checkbox]').prop('checked', false);
                             var selNodes = data.tree.getSelectedNodes();
@@ -128,6 +130,7 @@ class FancyTreeWidget(Widget):
                     'js_var': js_data_var,
                     'debug': settings.DEBUG and 1 or 0,
                     'select_mode': self.select_mode,
+                    'icons': 'true' if self.icons else 'false'
                 }
             );
         output.append(u'</script>')
