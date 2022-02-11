@@ -1,15 +1,16 @@
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django_extensions.db.fields import AutoSlugField
 import mptt
 
-from urlparse import urljoin
+from urllib.parse import urljoin
 
 class Category(models.Model):
     parent = models.ForeignKey('self',
                                null=True,
                                blank=True,
-                               related_name='children')
+                               related_name='children',
+                               on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     slug = AutoSlugField(max_length=50,
                          overwrite=True,
